@@ -1,0 +1,18 @@
+Convencion de nombres para las fotos de producto:
+
+  {id}.jpg | {id}.jpeg | {id}.webp | {id}.png    -> imagen principal
+  {id}-2.jpg | {id}-2.jpeg | {id}-2.webp | {id}-2.png  -> imagen secundaria (hover, opcional)
+
+El codigo prueba esos formatos EN ESE ORDEN hasta encontrar el que exista -
+no hace falta convertir nada, sube las fotos tal cual te las den.
+
+El {id} es el numero que trae Siesa para ese producto (el mismo "id" que
+ves en la respuesta de /api/catalogo/:nit). Ejemplos reales de Mundo Verde:
+
+  1.jpg     -> SOURDOUGH
+  5.jpg     -> BAGUETTE
+  175.jpg   -> SOURDOUGH COCOA (aunque no aparezca buscando por nombre en
+               API_v2_Items, su id SI esta en la respuesta de /api/catalogo,
+               viene directo de ItemsPrecios. Usa ese numero, no busques en Items.)
+
+Si el archivo no existe todavia, se ve el placeholder del trigo automaticamente.

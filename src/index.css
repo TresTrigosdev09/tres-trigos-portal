@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Divisor "perforado" tipo ticket de produccion - el elemento de firma del portal */
+.ticket-divider {
+  background-image: repeating-linear-gradient(
+    to right,
+    theme("colors.brand.brown") 0,
+    theme("colors.brand.brown") 6px,
+    transparent 6px,
+    transparent 14px
+  );
+  height: 2px;
+  opacity: 0.35;
+}
+
+/* Foco de teclado visible en todos los elementos interactivos (accesibilidad) */
+:focus-visible {
+  outline: 2px solid theme("colors.brand.dark");
+  outline-offset: 2px;
+}
+
+/* Oculta la barra de scroll en las filas horizontales de categorias, sin perder el scroll funcional */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

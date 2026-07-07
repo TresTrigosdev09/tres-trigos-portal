@@ -1,0 +1,17 @@
+# Dependencias instaladas — se reinstalan desde package.json con npm install
+node_modules/
+
+# Variables de entorno — contienen la URL del backend y modo dev, no van a GitHub
+.env
+.env.local
+
+# Build generado por Vite — se regenera con npm run build en el servidor
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
