@@ -9,6 +9,7 @@ import QuantityStepper from "../components/catalog/QuantityStepper";
 import Button from "../components/common/Button";
 import Spinner from "../components/common/Spinner";
 import FechaEntregaPicker from "../components/cart/FechaEntregaPicker";
+import { obtenerEmpaque } from "../config/empaquesProductos";
 
 const formatoCOP = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -183,6 +184,7 @@ export default function CartPage() {
                 cantidad={cantidad}
                 onCambiar={(nueva) => cambiarCantidad(producto.id, nueva)}
                 min={0}
+                paso={obtenerEmpaque(producto.referencia)}
               />
             </div>
 

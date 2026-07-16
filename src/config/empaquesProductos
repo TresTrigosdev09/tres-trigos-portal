@@ -1,0 +1,44 @@
+/**
+ * Productos que se venden en empaques de cantidad fija.
+ * La clave es la referencia del producto en Siesa (f120_referencia).
+ *
+ * Cuando un producto está aquí, el stepper de cantidad en el portal
+ * avanza en múltiplos del empaque (×6 o ×10), nunca en unidades sueltas.
+ * La cantidad enviada a Siesa siempre es en unidades (6, 12, 18...).
+ *
+ * PENDIENTE DE VERIFICAR (marcados con ⚠️):
+ *   - "CROISSANT MANTEQUILLA CRUDO": ref asumida 920 (CRUDO SENCILLO GRANDE)
+ *   - "CROISSANT ALMENDRAS": puede ser ref 317, 200, o ambas
+ *   - "PAPA HAMBURGUESA 95Gr": referencia desconocida, agregar cuando se confirme
+ *
+ * Cuando tengan la referencia exacta de los pendientes, se agrega aquí
+ * sin tocar ningún otro archivo.
+ */
+export const EMPAQUES = {
+  // ─── Paquetes de 10 ──────────────────────────────────────────────────────
+  "161":  { cantidad: 10 }, // BISCUIT PANECILLO MAIZ Y QUESO 120G
+  "918":  { cantidad: 10 }, // CRUDO PALITO DE QUESO GRANDE
+  "920":  { cantidad: 10 }, // CRUDO SENCILLO GRANDE (⚠️ verificar = Mantequilla)
+  "922":  { cantidad: 10 }, // CRUDO TRES QUESOS GRANDE
+  "953":  { cantidad: 10 }, // CRUDO ESPINACA Y QUESO GRANDE (mismo empaque que otros crudos)
+  "954":  { cantidad: 10 }, // CRUDO JAMON Y QUESO GRANDE
+  "1137": { cantidad: 10 }, // CRUDO AREQUIPE GRANDE (mismo empaque que otros crudos)
+
+  // ─── Paquetes de 6 ───────────────────────────────────────────────────────
+  "158":  { cantidad: 6 },  // CROISSANT BROWNIE
+  "206":  { cantidad: 6 },  // CROISSANT ARANDANOS
+  "317":  { cantidad: 6 },  // CROISSANT ALMENDRAS GRANDE (⚠️ verificar si también aplica ref 200)
+  "200":  { cantidad: 6 },  // CROISSANT ALMENDRAS (versión normal)
+  "704":  { cantidad: 6 },  // PAN PAPA 90G
+  // "XXX": { cantidad: 6 }, // PAPA HAMBURGUESA 95Gr ← agregar ref cuando se confirme
+};
+
+/**
+ * Devuelve el tamaño del empaque de un producto, o 1 si se vende por unidad.
+ *
+ * @param {string|number} referencia - referencia Siesa del producto
+ * @returns {number} - tamaño del empaque (1 si no tiene restricción)
+ */
+export function obtenerEmpaque(referencia) {
+  return EMPAQUES[String(referencia)]?.cantidad ?? 1;
+}
