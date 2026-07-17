@@ -2,6 +2,7 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-d
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import Header from "./components/layout/Header";
+import WhatsAppButton from "./components/common/WhatsAppButton";
 import LoginPage from "./pages/LoginPage";
 import CatalogPage from "./pages/CatalogPage";
 import CartPage from "./pages/CartPage";
@@ -21,6 +22,7 @@ function Layout({ children }) {
     <div className="min-h-screen bg-brand-cream">
       <Header />
       <main>{children}</main>
+      <WhatsAppButton />
     </div>
   );
 }

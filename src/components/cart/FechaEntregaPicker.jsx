@@ -18,42 +18,50 @@ function aStringFecha(fecha) {
 }
 
 /**
- * Calcula la primera fecha disponible para entrega.
- * Mínimo: hoy + 2 días. Si esa fecha cae domingo, avanza un día más (lunes).
+ * Calcula la primera fecha de entrega disponible.
+ * Reglas confirmadas (reunión julio 2026):
+ *  - Corte: 4:00pm entre semana, 11:00am sábados.
+ *  - Antes del corte, el pedido "cuenta" hoy. Después del corte, cuenta mañana.
+ *  - La entrega es 2 días naturales después del día que cuenta el pedido.
+ *  - Si esa fecha cae domingo, se corre al lunes (no hay entregas domingo).
  */
 function calcularFechaMinima() {
-  const minima = new Date();
-  minima.setDate(minima.getDate() + 2);
-  if (minima.getDay() === 0) {
-    minima.setDate(minima.getDate() + 1);
-  }
-  return minima;
-}
-
-/**
- * Verifica si en este momento se pueden hacer pedidos.
- * Solo aplica restricción los sábados: no se aceptan pedidos después de las 11:00am.
- */
-function verificarHorarioActual() {
   const ahora = new Date();
-  const dia = ahora.getDay();
+  const dia = ahora.getDay();      // 0=domingo, 6=sábado
   const hora = ahora.getHours();
   const minutos = ahora.getMinutes();
 
-  if (dia === 0) {
-    return {
-      bloqueado: true,
-      motivo: "Los domingos no recibimos pedidos. Puedes volver el lunes.",
-    };
-  }
+  // ¿Pasó el corte de hoy?
+  const minutosActuales = hora * 60 + minutos;
+  const corteSabado = 11 * 60;     // 11:00am
+  const corteSemana = 16 * 60;     // 4:00pm
+  const pasoCorte =
+    dia === 6 ? minutosActuales >= corteSabado : minutosActuales >= corteSemana;
 
-  if (dia === 6 && (hora > 11 || (hora === 11 && minutos > 0))) {
-    return {
-      bloqueado: true,
-      motivo: "Los pedidos del sábado se reciben hasta las 11:00am.",
-    };
-  }
+  // El pedido cuenta desde hoy, o mañana si ya pasó el corte
+  const base = new Date(ahora);
+  base.setHours(12, 0, 0, 0);      // mediodía, evita líos de zona horaria
+  if (pasoCorte) base.setDate(base.getDate() + 1);
 
+  // +2 días naturales
+  base.setDate(base.getDate() + 2);
+
+  // Si cae domingo, correr al lunes
+  if (base.getDay() === 0) base.setDate(base.getDate() + 1);
+
+  return base;
+}
+
+/**
+ * Con la regla nueva, pasar el corte NO bloquea el pedido — solo empuja
+ * la fecha de entrega (ver calcularFechaMinima). El único día sin pedidos
+ * es el domingo.
+ */
+function verificarHorarioActual() {
+  const ahora = new Date();
+  if (ahora.getDay() === 0) {
+    return { bloqueado: true, motivo: "Los domingos no recibimos pedidos. Puedes volver el lunes." };
+  }
   return { bloqueado: false };
 }
 

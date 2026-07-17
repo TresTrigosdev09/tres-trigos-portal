@@ -44,15 +44,32 @@ export default function CartPage() {
   const necesitaElegirSucursal = sucursales.length > 1;
   const sucursalLista = necesitaElegirSucursal ? sucursalId : sucursales[0]?.id;
 
+  // Fuente única de verdad de la validación del carrito.
+  // Devuelve la lista de campos obligatorios que aún faltan por llenar.
+  // Si está vacía, el pedido se puede enviar.
+  const camposFaltantes = [];
+
+  if (necesitaElegirSucursal && !sucursalId) {
+    camposFaltantes.push("Elegir la sucursal");
+  }
+
+  if (!fechaEntrega) {
+    camposFaltantes.push("Elegir la fecha de entrega");
+  }
+
+  // Cada pan tajable debe tener elegido Tajado o Completo.
+  const panesSinElegir = lista.filter(
+    ({ producto }) =>
+      esTajable(producto.referencia) && !notasTajado[producto.id]
+  );
+  if (panesSinElegir.length > 0) {
+    camposFaltantes.push("Elegir Tajado o Completo en cada pan");
+  }
+
+  const puedeConfirmar = camposFaltantes.length === 0 && !pedidoBloqueadoPorHorario;
+
   async function handleConfirmar() {
-    if (necesitaElegirSucursal && !sucursalId) {
-      setError("Elige a qué sucursal va el pedido antes de confirmar.");
-      return;
-    }
-    if (!fechaEntrega) {
-      setError("Elige una fecha de entrega antes de confirmar.");
-      return;
-    }
+    if (!puedeConfirmar) return;
 
     // Validar mínimo de pedido para ciudades de ruta nacional
     const sucursalNombre = sucursales.find((s) => s.id === sucursalLista)?.nombre ?? "";
@@ -189,11 +206,15 @@ export default function CartPage() {
             </div>
 
             {/* Opción Tajado/Completo — solo para panes que lo soportan */}
-            {esTajable(producto.referencia) && (
-              <div className="mt-2 flex gap-2 border-t border-brand-sand/40 pt-2">
-                <p className="mr-1 text-[11px] font-semibold uppercase tracking-wide text-brand-brown">
-                  ¿Cómo lo prefieres?
-                </p>
+              {esTajable(producto.referencia) && (
+                <div className={`mt-2 flex items-center gap-2 border-t pt-2 ${
+                  !notasTajado[producto.id] ? "border-alert/40" : "border-brand-sand/40"
+                }`}>
+                  <p className={`mr-1 text-[11px] font-semibold uppercase tracking-wide ${
+                    !notasTajado[producto.id] ? "text-alert" : "text-brand-brown"
+                  }`}>
+                    ¿Cómo lo prefieres? *
+                  </p>
                 {["TAJADO", "COMPLETO"].map((opcion) => (
                   <label
                     key={opcion}
@@ -308,18 +329,29 @@ export default function CartPage() {
               {formatoCOP.format(totalPrecio)}
             </p>
           </div>
-          <Button
-            onClick={handleConfirmar}
-            disabled={
-              enviando ||
-              !!pedidoBloqueadoPorHorario ||
-              (necesitaElegirSucursal && !sucursalId) ||
-              !fechaEntrega
-            }
-            className="!w-auto px-6"
-          >
-            {enviando ? "Enviando..." : "Confirmar pedido"}
-          </Button>
+          <div className="group relative">
+            {/* Mensaje que aparece al hacer hover cuando faltan campos */}
+            {!puedeConfirmar && !enviando && (
+              <div className="pointer-events-none absolute bottom-full right-0 mb-2 hidden w-56 rounded-lg bg-brand-dark px-3 py-2 text-left text-xs text-white shadow-lg group-hover:block">
+                <p className="mb-1 font-semibold">Falta completar:</p>
+                <ul className="list-inside list-disc space-y-0.5">
+                  {camposFaltantes.map((campo) => (
+                    <li key={campo}>{campo}</li>
+                  ))}
+                  {pedidoBloqueadoPorHorario && <li>{pedidoBloqueadoPorHorario}</li>}
+                </ul>
+                {/* Flechita del tooltip */}
+                <div className="absolute right-6 top-full h-0 w-0 border-x-4 border-t-4 border-x-transparent border-t-brand-dark" />
+              </div>
+            )}
+            <Button
+              onClick={handleConfirmar}
+              disabled={enviando || !puedeConfirmar}
+              className="!w-auto px-6"
+            >
+              {enviando ? "Enviando..." : "Confirmar pedido"}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

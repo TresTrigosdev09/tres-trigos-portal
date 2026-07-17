@@ -11,7 +11,7 @@ const formatoCOP = new Intl.NumberFormat("es-CO", {
   maximumFractionDigits: 0,
 });
 
-export default function ProductCard({ producto, onAgregar }) {
+export default function ProductCard({ producto, onAgregar, anchoCompleto = false }) {
   const [cantidad, setCantidad] = useState(0);
   const [imagenOk, setImagenOk] = useState(true);
   const [imagenHoverOk, setImagenHoverOk] = useState(true);
@@ -25,7 +25,7 @@ export default function ProductCard({ producto, onAgregar }) {
   const mostrarHover = imagenOk && imagenHoverOk;
   const empaque = obtenerEmpaque(producto.referencia);
   return (
-    <article className="flex w-40 flex-shrink-0 snap-start flex-col overflow-hidden rounded-xl bg-white shadow-sm sm:w-44">
+    <article className={`flex flex-shrink-0 snap-start flex-col overflow-hidden rounded-xl bg-white shadow-sm ${anchoCompleto ? "w-full sm:w-44" : "w-40 sm:w-44"}`}>
       <Link to={`/producto/${producto.id}`} className="group relative block aspect-square w-full">
         <ProductImage
           id={producto.id}

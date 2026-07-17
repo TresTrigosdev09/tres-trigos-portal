@@ -106,17 +106,18 @@ export default function CatalogPage() {
       {/* Resultados de búsqueda: las tarjetas mantienen el mismo tamaño que en el
           catálogo normal (w-40 sm:w-44 fijo). El contenedor usa flex-wrap para
           que pasen a la siguiente fila cuando no caben más, sin agrandarlas. */}
-      {terminoBusqueda && productosFiltrados.length > 0 && (
-        <div className="flex flex-wrap gap-3 px-4 sm:px-6">
-          {productosFiltrados.map((producto) => (
-            <ProductCard
-              key={producto.id}
-              producto={producto}
-              onAgregar={agregar}
-            />
-          ))}
-        </div>
-      )}
+          {terminoBusqueda && productosFiltrados.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 px-4 sm:flex sm:flex-wrap sm:px-6">
+            {productosFiltrados.map((producto) => (
+              <ProductCard
+                key={producto.id}
+                producto={producto}
+                onAgregar={agregar}
+                anchoCompleto
+              />
+            ))}
+          </div>
+        )}
 
       <CartBar />
     </div>
