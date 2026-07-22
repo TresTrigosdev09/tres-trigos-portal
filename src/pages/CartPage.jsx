@@ -89,6 +89,11 @@ export default function CartPage() {
     setEnviando(true);
     setError("");
 
+    // Marca única de este intento de pedido (idempotency key).
+    // Nace aquí, viaja al backend y se estampa en Siesa. Si la creación
+    // se cae por timeout, el backend la usa para verificar si el pedido
+    // SÍ entró, en vez de adivinar. 36 caracteres: cabe en el campo de 50.
+    const idempotencyKey = crypto.randomUUID().slice(0, 8);
     const etiquetaEntrega = OPCIONES_ENTREGA.find((o) => o.id === modalidadEntrega)?.label ?? "";
     const notaFinal = [etiquetaEntrega, observaciones.trim()].filter(Boolean).join(" | ");
 
@@ -118,17 +123,28 @@ export default function CartPage() {
           sucursal: sucursalLista,
           notasGenerales: notaFinal,
           fechaEntrega, // YYYY-MM-DD, el backend lo convierte a YYYYMMDD para Siesa
+          idempotencyKey, // marca única para verificar el pedido tras un timeout
         }),
       });
 
-      if (!respuesta.ok) {
-        const data = await respuesta.json().catch(() => ({}));
+      const data = await respuesta.json().catch(() => ({}));
+
+      // Fallo real: Siesa rechazó o no se creó. El cliente puede reintentar.
+      if (!respuesta.ok || data.ok === false) {
         setError(data.error || "No se pudo crear el pedido. Intenta de nuevo.");
         setEnviando(false);
         return;
       }
-
-      const data = await respuesta.json();
+      // En proceso: timeout no verificado. El pedido probablemente SÍ entró.
+      // No reenviar. Vaciar carrito y avisar por WhatsApp.
+      if (data.estado === "en_proceso") {
+        vaciar();
+        navigate("/confirmacion", {
+          state: { total: totalPrecio, estado: "en_proceso" },
+        });
+        return;
+      }
+      // Confirmado (camino feliz o timeout verificado): confirmación normal.
       navigate("/confirmacion", {
         state: { total: totalPrecio, numeroPedido: data.numeroPedido ?? null },
       });
@@ -355,5 +371,4 @@ export default function CartPage() {
         </div>
       </div>
     </div>
-  );
-}
+  );}

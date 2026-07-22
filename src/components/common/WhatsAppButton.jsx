@@ -4,7 +4,7 @@
  */
 export default function WhatsAppButton() {
   const numero = "573163652363"; // +57 316 365 2363, formato internacional sin signos
-  const mensaje = encodeURIComponent("Hola, escribo desde el portal de clientes.");
+  const mensaje = encodeURIComponent("Hola, escribo desde el portal de clientes institucionales.");
   const url = `https://wa.me/${numero}?text=${mensaje}`;
 
   return (

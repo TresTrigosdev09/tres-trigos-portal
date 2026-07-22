@@ -31,6 +31,46 @@ export default function Header() {
             </Link>
 
             <Link
+              to="/politicas"
+              className="hidden text-sm font-medium text-brand-brown hover:text-brand-dark sm:block"
+            >
+              Políticas
+            </Link>
+
+            {/* Móvil: iconos */}
+            <Link
+              to="/historial"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-brand-brown active:scale-95 sm:hidden"
+              aria-label="Mis pedidos"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+                <path
+                  d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 7h6m-6 4h4"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+
+            <Link
+              to="/politicas"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-brand-brown active:scale-95 sm:hidden"
+              aria-label="Políticas"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+                <path
+                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+
+            <Link
               to="/carrito"
               className="relative flex h-10 w-10 items-center justify-center rounded-full bg-brand-dark text-white transition-transform active:scale-95"
               aria-label={`Ver carrito, ${totalItems} articulos`}

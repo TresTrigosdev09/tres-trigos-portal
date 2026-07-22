@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import QuantityStepper from "../components/catalog/QuantityStepper";
 import Button from "../components/common/Button";
 import ProductImage from "../components/common/ProductImage";
+import { obtenerEmpaque } from "../config/empaquesProductos";
 
 const formatoCOP = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -17,9 +18,6 @@ export default function ProductDetailPage() {
   const navigate = useNavigate();
   const { productos } = useAuth();
   const { agregar } = useCart();
-  const [cantidad, setCantidad] = useState(1);
-  const [imagenOk, setImagenOk] = useState(true);
-  const [imagenHoverOk, setImagenHoverOk] = useState(true);
 
   const producto = productos.find((p) => String(p.id) === String(id));
 
@@ -27,6 +25,11 @@ export default function ProductDetailPage() {
     navigate("/catalogo");
     return null;
   }
+
+  const paso = obtenerEmpaque(producto.referencia);
+  const [cantidad, setCantidad] = useState(paso);
+  const [imagenOk, setImagenOk] = useState(true);
+  const [imagenHoverOk, setImagenHoverOk] = useState(true);
 
   function handleAgregar() {
     agregar(producto, cantidad);
@@ -92,7 +95,7 @@ export default function ProductDetailPage() {
           )}
 
           <div className="mt-6 flex items-center gap-3">
-            <QuantityStepper cantidad={cantidad} onCambiar={setCantidad} min={1} />
+          <QuantityStepper cantidad={cantidad} onCambiar={setCantidad} min={paso} paso={paso} />
             <Button variant="accent" className="flex-1" onClick={handleAgregar}>
               Agregar al carrito
             </Button>

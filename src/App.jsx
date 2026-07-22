@@ -9,6 +9,7 @@ import CartPage from "./pages/CartPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import HistorialPage from "./pages/HistorialPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import PoliticasPage from "./pages/PoliticasPage";
 
 /** Bloquea el acceso a paginas internas si no hay sesion iniciada. */
 function RutaProtegida({ children }) {
@@ -67,6 +68,16 @@ function AppRoutes() {
           <RutaProtegida>
             <Layout>
               <HistorialPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/politicas"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <PoliticasPage />
             </Layout>
           </RutaProtegida>
         }
