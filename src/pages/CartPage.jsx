@@ -95,7 +95,9 @@ export default function CartPage() {
     // SÍ entró, en vez de adivinar. 36 caracteres: cabe en el campo de 50.
     const idempotencyKey = crypto.randomUUID().slice(0, 8);
     const etiquetaEntrega = OPCIONES_ENTREGA.find((o) => o.id === modalidadEntrega)?.label ?? "";
-    const notaFinal = [etiquetaEntrega, observaciones.trim()].filter(Boolean).join(" | ");
+    // El texto del cliente va PRIMERO para que comercial pueda filtrar por él
+    // en Siesa sin que la etiqueta de entrega estorbe al inicio de la nota.
+    const notaFinal = [observaciones.trim(), etiquetaEntrega].filter(Boolean).join(" | ");
 
     // Construir ítems incluyendo la nota de tajado de cada producto
     const items = lista.map(({ producto, cantidad }) => {
