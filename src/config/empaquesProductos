@@ -23,7 +23,6 @@ export const EMPAQUES = {
   "953":  { cantidad: 10 }, // CRUDO ESPINACA Y QUESO GRANDE (mismo empaque que otros crudos)
   "954":  { cantidad: 10 }, // CRUDO JAMON Y QUESO GRANDE
   "1137": { cantidad: 10 }, // CRUDO AREQUIPE GRANDE (mismo empaque que otros crudos)
-  "893":  { cantidad: 10 }, // PAN DE QUESO Y GUAYABA BUDÍN
 
   // ─── Paquetes de 6 ───────────────────────────────────────────────────────
   "158":  { cantidad: 6 },  // CROISSANT BROWNIE
@@ -31,7 +30,7 @@ export const EMPAQUES = {
   "317":  { cantidad: 6 },  // CROISSANT ALMENDRAS GRANDE (⚠️ verificar si también aplica ref 200)
   "200":  { cantidad: 6 },  // CROISSANT ALMENDRAS (versión normal)
   "704":  { cantidad: 6 },  // PAN PAPA 90G
-  // "XXX": { cantidad: 6 }, // PAPA HAMBURGUESA 95Gr ← agregar ref cuando se confirme
+  "893":  { cantidad: 10 }, // PAN DE QUESO Y GUAYABA BUDÍN
 };
 
 /**
